@@ -1,6 +1,9 @@
 
 services:
   php:
+    user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
+    environment:
+      COMPOSER_HOME: /tmp/composer
     volumes:
       - .:/app
       - symfony_shop_vendor:/app/vendor
