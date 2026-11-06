@@ -1,0 +1,35 @@
+services:
+  php:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile.dev
+    env_file: .env.local
+    restart: unless-stopped
+    depends_on:
+      database:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    depends_on:
+      - php
+
+  database:
+    image: postgres:16-alpine
+    env_file: .env.local
+    volumes:
+      - database_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  database_data:
