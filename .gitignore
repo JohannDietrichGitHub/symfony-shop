@@ -21,4 +21,4 @@
 ###< symfony/asset-mapper ###
 
 /.idea/
-/plans/
+/.opencode/
