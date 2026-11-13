@@ -16,8 +16,7 @@ final class RegistrationController extends AbstractController
     #[Route('/register', name: 'app_register', methods: ['GET', 'POST'])]
     public function register(
         Request $request,
-        UserPasswordHasherInterface $passwordHasher,
-        EntityManagerInterface $entityManager,
+        UserRegistrationService $userRegistrationService
     ): Response {
         $user = new User();
 
@@ -27,12 +26,7 @@ final class RegistrationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $plainPassword = $form->get('plainPassword')->getData();
 
-            $user->setPassword(
-                $passwordHasher->hashPassword($user, $plainPassword)
-            );
-
-            $entityManager->persist($user);
-            $entityManager->flush();
+            $userRegistrationService->registerUser($user, $plainPassword);
 
             return $this->redirectToRoute('app_login');
         }
