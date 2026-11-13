@@ -3,21 +3,32 @@
 {% block title %}Products{% endblock %}
 
 {% block body %}
-    <h1>Products</h1>
+    <section class="container page-section">
+        <div class="page-heading">
+            <div>
+                <p class="eyebrow">The collection</p>
+                <h1>Products</h1>
+            </div>
+            <p class="muted">{{ products|length }} item{% if products|length != 1 %}s{% endif %}</p>
+        </div>
 
-    {% if products is empty %}
-        <p>No products found.</p>
-    {% else %}
-        <ul>
+        {% if products is empty %}
+            <div class="empty-state"><p>No products found.</p></div>
+        {% else %}
+        <ul class="product-grid">
             {% for product in products %}
-                <li>
-                    <a href="{{ path('app_product_show', {id: product.id}) }}">
-                        {{ product.name }}
+                <li class="product-card">
+                    <a class="product-card-link" href="{{ path('app_product_show', {id: product.id}) }}">
+                        <div class="product-image"><span>{{ product.name|first|upper }}</span></div>
+                        <div class="product-card-body">
+                            <div class="product-card-title"><h2>{{ product.name }}</h2><span class="arrow">↗</span></div>
+                            <p class="price">{{ (product.price / 100)|number_format(2, '.', ',') }} €</p>
+                            <p class="stock">{{ product.stock }} in stock</p>
+                        </div>
                     </a>
-                    <span>{{ (product.price / 100)|number_format(2, '.', ',') }} €</span>
-                    <span>({{ product.stock }} in stock)</span>
                 </li>
             {% endfor %}
         </ul>
-    {% endif %}
+        {% endif %}
+    </section>
 {% endblock %}

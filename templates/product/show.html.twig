@@ -3,10 +3,18 @@
 {% block title %}{{ product.name }}{% endblock %}
 
 {% block body %}
-    <p><a href="{{ path('app_products_list') }}">← Back to products</a></p>
-
-    <h1>{{ product.name }}</h1>
-    <p>{{ product.description }}</p>
-    <p><strong>{{ (product.price / 100)|number_format(2, '.', ',') }} €</strong></p>
-    <p>{{ product.stock }} in stock</p>
+    <section class="container page-section">
+        <a class="back-link" href="{{ path('app_products_list') }}">← Back to products</a>
+        <div class="product-detail">
+            <div class="product-detail-image"><span>{{ product.name|first|upper }}</span></div>
+            <div class="product-detail-copy">
+                <p class="eyebrow">Featured piece</p>
+                <h1>{{ product.name }}</h1>
+                <p class="detail-description">{{ product.description }}</p>
+                <p class="detail-price">{{ (product.price / 100)|number_format(2, '.', ',') }} €</p>
+                <p class="stock stock-detail"><span class="stock-dot"></span>{{ product.stock }} in stock</p>
+                <button class="button button-primary" type="button">Add to basket <span aria-hidden="true">→</span></button>
+            </div>
+        </div>
+    </section>
 {% endblock %}

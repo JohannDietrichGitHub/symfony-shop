@@ -3,5 +3,13 @@
 {% block title %}Home - My Shop{% endblock %}
 
 {% block body %}
-    <h1>Welcome to the shop</h1>
+    <section class="hero container">
+        <div class="hero-copy">
+            <p class="eyebrow">Curated for everyday living</p>
+            <h1>Things worth<br><em>keeping close.</em></h1>
+            <p class="hero-lead">Discover useful, beautiful pieces chosen to make the ordinary feel a little more considered.</p>
+            <a class="button button-primary" href="{{ path('app_products_list') }}">Explore the collection <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="hero-art" aria-hidden="true"><span>MY<br>SHOP</span></div>
+    </section>
 {% endblock %}
