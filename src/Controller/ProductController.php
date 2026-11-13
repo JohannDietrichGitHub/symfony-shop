@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class ProductController extends AbstractController
 {
-    #[Route('/products', name: 'products', methods: ['GET'])]
+    #[Route('/products', name: 'app_products_list', methods: ['GET'])]
     public function showProducts(ProductRepository $productRepository)
     {
         $products = $productRepository->findBy(
@@ -21,7 +21,7 @@ final class ProductController extends AbstractController
         ]);
     }
 
-    #[Route('/products/{id}', name: 'product', methods: ['GET'])]
+    #[Route('/products/{id}', name: 'app_product_show', methods: ['GET'])]
     public function showProduct(
         int $id,
         ProductRepository $productRepository

@@ -11,7 +11,7 @@
         <ul>
             {% for product in products %}
                 <li>
-                    <a href="{{ path('product', {id: product.id}) }}">
+                    <a href="{{ path('app_product_show', {id: product.id}) }}">
                         {{ product.name }}
                     </a>
                     <span>{{ (product.price / 100)|number_format(2, '.', ',') }} €</span>
