@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Service;
+use App\Entity\User;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Doctrine\ORM\EntityManagerInterface;
 
 Final class UserRegistrationService
 {
