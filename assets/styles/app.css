@@ -55,6 +55,10 @@ h1 em { color: var(--accent); font-family: 'Playfair Display', Georgia, serif; f
 .price, .detail-price { margin-bottom: 4px; font-weight: 700; }
 .stock { margin: 0; color: var(--muted); font-size: .82rem; }
 .empty-state { padding: 60px; text-align: center; background: var(--surface); border: 1px dashed var(--line); border-radius: var(--radius); }
+.cart-list { display: grid; gap: 12px; padding: 0; margin: 0; list-style: none; }
+.cart-item { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 22px 24px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.cart-item h2 { margin-bottom: 4px; font-size: 1.05rem; }
+.cart-item .price { margin: 0; white-space: nowrap; }
 .back-link { display: inline-block; margin-bottom: 56px; color: var(--muted); font-size: .9rem; }
 .product-detail { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 80px; }
 .product-detail-image { min-height: 520px; border-radius: var(--radius); color: var(--accent); font-family: Georgia, serif; font-size: 9rem; font-weight: 700; }

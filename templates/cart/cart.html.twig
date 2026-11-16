@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Your cart{% endblock %}
+
+{% block body %}
+    <section class="container page-section">
+        <div class="page-heading">
+            <div>
+                <p class="eyebrow">Your selection</p>
+                <h1>Shopping cart</h1>
+            </div>
+        </div>
+
+        {% if userCart is null or userCart.cartItems is empty %}
+            <div class="empty-state">
+                <p>Your cart is empty.</p>
+                <a class="button button-primary" href="{{ path('app_products_list') }}">Browse products <span aria-hidden="true">→</span></a>
+            </div>
+        {% else %}
+            <ul class="cart-list" aria-label="Cart items">
+                {% for item in userCart.cartItems %}
+                    <li class="cart-item">
+                        <div>
+                            <h2>{{ item.product.name }}</h2>
+                            <p class="muted">Quantity: {{ item.quantity }}</p>
+                        </div>
+                        <p class="price">{{ ((item.product.price * item.quantity) / 100)|number_format(2, '.', ',') }} €</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </section>
+{% endblock %}

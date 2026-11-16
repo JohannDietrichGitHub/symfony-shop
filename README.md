@@ -1,4 +1,4 @@
-# Symfony Shop
+# AlsaceMarket
 
 Docker Compose deployment for local development and a single VPS.
 
