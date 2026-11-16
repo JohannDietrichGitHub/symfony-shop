@@ -30,6 +30,18 @@ class Order
     #[Assert\PositiveOrZero]
     private ?int $total = null;
 
+    #[ORM\Column(length: 3)]
+    private string $currency = 'eur';
+
+    #[ORM\Column(length: 255, unique: true, nullable: true)]
+    private ?string $stripeCheckoutSessionId = null;
+
+    #[ORM\Column(length: 255, unique: true, nullable: true)]
+    private ?string $stripePaymentIntentId = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $paidAt = null;
+
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
@@ -40,6 +52,7 @@ class Order
     public function __construct()
     {
         $this->orderItems = new ArrayCollection();
+        $this->status = 'pending';
     }
 
     public function getId(): ?int
@@ -86,6 +99,55 @@ class Order
     public function setTotal(int $total): static
     {
         $this->total = $total;
+
+        return $this;
+    }
+
+    public function getCurrency(): string
+    {
+        return $this->currency;
+    }
+
+    public function setCurrency(string $currency): static
+    {
+        $this->currency = strtolower($currency);
+
+        return $this;
+    }
+
+    public function getStripeCheckoutSessionId(): ?string
+    {
+        return $this->stripeCheckoutSessionId;
+    }
+
+    public function setStripeCheckoutSessionId(?string $stripeCheckoutSessionId): static
+    {
+        $this->stripeCheckoutSessionId = $stripeCheckoutSessionId;
+
+        return $this;
+    }
+
+    public function getStripePaymentIntentId(): ?string
+    {
+        return $this->stripePaymentIntentId;
+    }
+
+    public function setStripePaymentIntentId(?string $stripePaymentIntentId): static
+    {
+        $this->stripePaymentIntentId = $stripePaymentIntentId;
+
+        return $this;
+    }
+
+    public function getPaidAt(): ?\DateTimeImmutable
+    {
+        return $this->paidAt;
+    }
+
+    public function markAsPaid(\DateTimeImmutable $paidAt): static
+    {
+        $this->status = 'paid';
+        $this->paidAt = $paidAt;
 
         return $this;
     }

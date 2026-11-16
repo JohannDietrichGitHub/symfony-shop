@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Payment received{% endblock %}
+
+{% block body %}
+    <section class="container page-section">
+        <div class="empty-state">
+            <p class="eyebrow">Thank you</p>
+            <h1>Your payment is being confirmed</h1>
+            <p>We are checking your payment with the provider. Your order will appear in your account once confirmation is received.</p>
+            <a class="button button-primary" href="{{ path('app_profile') }}">Go to your profile <span aria-hidden="true">→</span></a>
+        </div>
+    </section>
+{% endblock %}

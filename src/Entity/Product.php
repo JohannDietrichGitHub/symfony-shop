@@ -43,6 +43,9 @@ class Product
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $archivedAt = null;
+
     /**
      * @var Collection<int, OrderItem>
      */
@@ -148,6 +151,30 @@ class Product
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+
+    public function getArchivedAt(): ?\DateTimeImmutable
+    {
+        return $this->archivedAt;
+    }
+
+    public function archive(): static
+    {
+        $this->archivedAt = new \DateTimeImmutable();
+
+        return $this;
+    }
+
+    public function restore(): static
+    {
+        $this->archivedAt = null;
+
+        return $this;
+    }
+
+    public function isArchived(): bool
+    {
+        return null !== $this->archivedAt;
     }
 
     /**

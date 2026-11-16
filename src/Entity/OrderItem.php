@@ -23,6 +23,9 @@ class OrderItem
     #[ORM\JoinColumn(nullable: false)]
     private ?Product $product = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $productName = null;
+
     #[ORM\Column]
     #[Assert\Positive]
     private ?int $quantity = null;
@@ -63,6 +66,18 @@ class OrderItem
     public function setProduct(?Product $product): static
     {
         $this->product = $product;
+
+        return $this;
+    }
+
+    public function getProductName(): ?string
+    {
+        return $this->productName;
+    }
+
+    public function setProductName(string $productName): static
+    {
+        $this->productName = $productName;
 
         return $this;
     }

@@ -47,6 +47,10 @@
                 <span>Total</span>
                 <strong>{{ (cartTotal / 100)|number_format(2, '.', ',') }} €</strong>
             </div>
+            <form action="{{ path('app_checkout_start') }}" method="post">
+                <input type="hidden" name="_token" value="{{ csrf_token('start_checkout') }}">
+                <button class="button button-primary" type="submit">Proceed to payment <span aria-hidden="true">→</span></button>
+            </form>
         {% endif %}
     </section>
 {% endblock %}
