@@ -87,6 +87,7 @@ h1 em { color: var(--accent); font-family: 'Playfair Display', Georgia, serif; f
 .button-full { width: 100%; margin-top: 24px; }
 .alert { padding: 12px 14px; color: #9c352b; background: #fbe9e5; border-radius: 9px; font-size: .9rem; }
 .alert-success { color: #286747; background: #e1f1e6; }
+.flash-message { padding-top: 18px; color: #9c352b; }
 .profile-page { max-width: 820px; }
 .profile-card { max-width: 680px; padding: 32px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
 .profile-heading-copy { max-width: 440px; margin-bottom: 0; padding-top: 10px;}

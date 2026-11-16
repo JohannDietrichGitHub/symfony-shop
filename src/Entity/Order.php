@@ -152,6 +152,15 @@ class Order
         return $this;
     }
 
+    public function markPaymentFailed(): static
+    {
+        if ('paid' !== $this->status) {
+            $this->status = 'payment_failed';
+        }
+
+        return $this;
+    }
+
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;

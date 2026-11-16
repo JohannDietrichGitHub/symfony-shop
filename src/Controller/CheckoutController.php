@@ -43,11 +43,21 @@ final class CheckoutController extends AbstractController
             $this->addFlash('error', $exception->getMessage());
 
             return $this->redirectToRoute('app_cart_show');
-        } catch (ApiErrorException|\RuntimeException $exception) {
+        } catch (ApiErrorException $exception) {
             $logger->error('Unable to create Stripe Checkout Session.', [
                 'exception' => $exception,
             ]);
             $this->addFlash('error', 'Payment could not be started. Please try again.');
+
+            return $this->redirectToRoute('app_cart_show');
+        } catch (\RuntimeException $exception) {
+            $logger->error('Checkout configuration is invalid.', [
+                'exception' => $exception,
+            ]);
+            $this->addFlash(
+                'error',
+                'Stripe checkout is not configured. Set STRIPE_SECRET_KEY in .env.local, then restart the application.',
+            );
 
             return $this->redirectToRoute('app_cart_show');
         }
