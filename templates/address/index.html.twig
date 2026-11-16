@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Your addresses{% endblock %}
+
+{% block body %}
+    <section class="container page-section address-page">
+        <a class="back-link" href="{{ path('app_profile') }}">← Back to profile</a>
+        <div class="page-heading">
+            <div>
+                <p class="eyebrow">Account</p>
+                <h1>Your addresses</h1>
+            </div>
+            <a class="button button-primary" href="{{ path('app_address_new') }}">Add address</a>
+        </div>
+
+        {% if addresses is empty %}
+            <div class="empty-state">
+                <h2>No saved addresses</h2>
+                <p class="muted">Save a delivery address to make checkout faster.</p>
+                <a class="button button-primary" href="{{ path('app_address_new') }}">Add your first address</a>
+            </div>
+        {% else %}
+            <div class="address-grid">
+                {% for address in addresses %}
+                    <article class="address-card">
+                        <div class="address-card-heading">
+                            <div>
+                                <p class="eyebrow">{{ address.label }}</p>
+                                <h2>{{ address.recipientName }}</h2>
+                            </div>
+                            {% if address.default %}
+                                <span class="address-badge">Default</span>
+                            {% endif %}
+                        </div>
+                        {% if address.company %}<p>{{ address.company }}</p>{% endif %}
+                        <p>
+                            {{ address.addressLine1 }}{% if address.addressLine2 %}<br>{{ address.addressLine2 }}{% endif %}<br>
+                            {{ address.postalCode }} {{ address.city }}<br>
+                            {{ address.countryCode }}
+                        </p>
+                        {% if address.phone %}<p class="muted">{{ address.phoneCountryCode }} {{ address.phone }}</p>{% endif %}
+                        <div class="address-actions">
+                            <a href="{{ path('app_address_edit', {id: address.id}) }}">Edit</a>
+                            {% if not address.default %}
+                                <form method="post" action="{{ path('app_address_default', {id: address.id}) }}">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('default-address-' ~ address.id) }}">
+                                    <button type="submit">Make default</button>
+                                </form>
+                            {% endif %}
+                            <form method="post" action="{{ path('app_address_delete', {id: address.id}) }}" onsubmit="return confirm('Delete this address?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete-address-' ~ address.id) }}">
+                                <button class="danger-action" type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </section>
+{% endblock %}

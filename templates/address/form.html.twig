@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ heading }}{% endblock %}
+
+{% block body %}
+    <section class="container page-section address-page">
+        <a class="back-link" href="{{ path('app_address_index') }}">← Back to addresses</a>
+        <div class="page-heading">
+            <div>
+                <p class="eyebrow">Address book</p>
+                <h1>{{ heading }}</h1>
+            </div>
+        </div>
+
+        <div class="address-form-card">
+            {{ form_start(addressForm) }}
+                <div class="address-form-grid">
+                    {{ form_row(addressForm.label) }}
+                    {{ form_row(addressForm.recipientName) }}
+                    {{ form_row(addressForm.company) }}
+                    <div class="phone-input-group">
+                        {{ form_widget(addressForm.phoneCountryCode, {attr: {'aria-label': 'Phone country code'}}) }}
+                        {{ form_row(addressForm.phone, {label: 'Phone number'}) }}
+                    </div>
+                </div>
+                {{ form_row(addressForm.addressLine1) }}
+                {{ form_row(addressForm.addressLine2) }}
+                <div class="address-form-grid">
+                    {{ form_row(addressForm.postalCode) }}
+                    {{ form_row(addressForm.city) }}
+                    {{ form_row(addressForm.countryCode) }}
+                </div>
+                {{ form_row(addressForm.isDefault) }}
+                <button class="button button-primary" type="submit">{{ submitLabel }}</button>
+            {{ form_end(addressForm) }}
+        </div>
+    </section>
+{% endblock %}

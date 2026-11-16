@@ -24,10 +24,24 @@
                     {{ form_row(profileForm.firstName) }}
                     {{ form_row(profileForm.lastName) }}
                 </div>
-                {{ form_row(profileForm.phone) }}
+                <div class="profile-phone-grid">
+                    <div class="phone-input-group">
+                        {{ form_widget(profileForm.phoneCountryCode, {attr: {'aria-label': 'Phone country code'}}) }}
+                        {{ form_row(profileForm.phone, {label: 'Phone number'}) }}
+                    </div>
+                </div>
                 {{ form_row(profileForm.marketingEmailOptIn) }}
                 <button class="button button-primary" type="submit">Save changes</button>
             {{ form_end(profileForm) }}
+        </div>
+
+        <div class="profile-card profile-address-link">
+            <div>
+                <p class="eyebrow">Delivery</p>
+                <h2>Saved addresses</h2>
+                <p class="muted">Manage the addresses you use for delivery and checkout.</p>
+            </div>
+            <a class="button button-primary" href="{{ path('app_address_index') }}">Manage addresses</a>
         </div>
     </section>
 {% endblock %}

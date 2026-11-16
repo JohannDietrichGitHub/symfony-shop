@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'user_profile')]
@@ -24,7 +25,12 @@ class UserProfile
     private ?string $lastName = null;
 
     #[ORM\Column(length: 30, nullable: true)]
+    #[Assert\Length(max: 30)]
     private ?string $phone = null;
+
+    #[ORM\Column(length: 5, nullable: true)]
+    #[Assert\Regex(pattern: '/^\+[1-9]\d{0,3}$/', message: 'Use a valid international calling code, such as +33.')]
+    private ?string $phoneCountryCode = null;
 
     #[ORM\Column]
     private bool $marketingEmailOptIn = false;
@@ -91,6 +97,18 @@ class UserProfile
     public function setPhone(?string $phone): static
     {
         $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getPhoneCountryCode(): ?string
+    {
+        return $this->phoneCountryCode ?? '+33';
+    }
+
+    public function setPhoneCountryCode(?string $phoneCountryCode): static
+    {
+        $this->phoneCountryCode = $phoneCountryCode;
 
         return $this;
     }
