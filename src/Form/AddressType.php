@@ -21,10 +21,28 @@ final class AddressType extends AbstractType
             ->add('addressLine2', TextType::class, ['label' => 'Apartment, suite, etc.', 'required' => false])
             ->add('postalCode', TextType::class, ['label' => 'Postal code'])
             ->add('city', TextType::class, ['label' => 'City'])
-            ->add('countryCode', TextType::class, [
+            ->add('countryCode', ChoiceType::class, [
                 'label' => 'Country',
-                'help' => 'Use the two-letter ISO code, for example FR.',
-                'attr' => ['maxlength' => 2, 'style' => 'text-transform: uppercase'],
+                'placeholder' => 'Select country',
+                'choices' => [
+                    '🇫🇷 France' => 'FR',
+                    '🇨🇱 Chile' => 'CL',
+                    '🇩🇪 Germany' => 'DE',
+                    '🇪🇸 Spain' => 'ES',
+                    '🇮🇹 Italy' => 'IT',
+                    '🇧🇪 Belgium' => 'BE',
+                    '🇨🇭 Switzerland' => 'CH',
+                    '🇬🇧 United Kingdom' => 'GB',
+                    '🇺🇸 United States' => 'US',
+                    '🇨🇦 Canada' => 'CA',
+                    '🇲🇽 Mexico' => 'MX',
+                    '🇧🇷 Brazil' => 'BR',
+                    '🇦🇺 Australia' => 'AU',
+                    '🇳🇿 New Zealand' => 'NZ',
+                    '🇯🇵 Japan' => 'JP',
+                    '🇨🇳 China' => 'CN',
+                    '🇮🇳 India' => 'IN',
+                ],
             ])
             ->add('phoneCountryCode', ChoiceType::class, [
                 'label' => 'Phone country code',
