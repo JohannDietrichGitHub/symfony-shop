@@ -20,12 +20,20 @@
                 <li class="product-card">
                     <a class="product-card-link" href="{{ path('app_product_show', {id: product.id}) }}">
                         <div class="product-image"><span>{{ product.name|first|upper }}</span></div>
-                        <div class="product-card-body">
+                    </a>
+                    <div class="product-card-body">
+                        <a class="product-card-link" href="{{ path('app_product_show', {id: product.id}) }}">
                             <div class="product-card-title"><h2>{{ product.name }}</h2><span class="arrow">↗</span></div>
                             <p class="price">{{ (product.price / 100)|number_format(2, '.', ',') }} €</p>
                             <p class="stock">{{ product.stock }} in stock</p>
-                        </div>
-                    </a>
+                        </a>
+                        {% if app.user %}
+                            <form action="{{ path('app_cart_item_add', {id: product.id}) }}" method="post">
+                                <input type="hidden" name="_token" value="{{ csrf_token('add_to_cart') }}">
+                                <button class="button button-primary product-add-button" type="submit">Add to cart <span aria-hidden="true">→</span></button>
+                            </form>
+                        {% endif %}
+                    </div>
                 </li>
             {% endfor %}
         </ul>

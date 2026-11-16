@@ -17,17 +17,36 @@
                 <a class="button button-primary" href="{{ path('app_products_list') }}">Browse products <span aria-hidden="true">→</span></a>
             </div>
         {% else %}
+            {% set cartTotal = userCart.cartItems|reduce((total, item) => total + (item.product.price * item.quantity), 0) %}
             <ul class="cart-list" aria-label="Cart items">
                 {% for item in userCart.cartItems %}
                     <li class="cart-item">
                         <div>
                             <h2>{{ item.product.name }}</h2>
-                            <p class="muted">Quantity: {{ item.quantity }}</p>
+                            <p class="muted">{{ (item.product.price / 100)|number_format(2, '.', ',') }} € each</p>
                         </div>
-                        <p class="price">{{ ((item.product.price * item.quantity) / 100)|number_format(2, '.', ',') }} €</p>
+                        <div class="cart-item-quantity">
+                            <span class="visually-hidden">Quantity</span>
+                            <div class="quantity-controls">
+                                <form action="{{ path('app_cart_item_decrease', {id: item.id}) }}" method="post"{% if item.quantity == 1 %} onsubmit="return confirm('Remove {{ item.product.name|e('js') }} from your cart?')"{% endif %}>
+                                    <input type="hidden" name="_token" value="{{ csrf_token('update_cart') }}">
+                                    <button class="quantity-button" type="submit" aria-label="Decrease {{ item.product.name }} quantity">−</button>
+                                </form>
+                                <span class="cart-quantity" aria-label="Quantity">{{ item.quantity }}</span>
+                                <form action="{{ path('app_cart_item_increase', {id: item.id}) }}" method="post">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('update_cart') }}">
+                                    <button class="quantity-button" type="submit" aria-label="Increase {{ item.product.name }} quantity">+</button>
+                                </form>
+                            </div>
+                        </div>
+                        <p class="price cart-item-total">{{ ((item.product.price * item.quantity) / 100)|number_format(2, '.', ',') }} €</p>
                     </li>
                 {% endfor %}
             </ul>
+            <div class="cart-summary">
+                <span>Total</span>
+                <strong>{{ (cartTotal / 100)|number_format(2, '.', ',') }} €</strong>
+            </div>
         {% endif %}
     </section>
 {% endblock %}

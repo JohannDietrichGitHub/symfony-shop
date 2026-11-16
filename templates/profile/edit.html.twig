@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Your profile{% endblock %}
+
+{% block body %}
+    <section class="container page-section profile-page">
+        <div class="page-heading">
+            <div>
+                <p class="eyebrow">Account</p>
+                <h1>Your profile</h1>
+            </div>
+            <p class="muted">Manage your personal details and communication preferences.</p>
+        </div>
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+
+        <div class="profile-card">
+            <p class="profile-email"><strong>Account email</strong><br>{{ user.email }}</p>
+
+            {{ form_start(profileForm) }}
+                <div class="profile-form-grid">
+                    {{ form_row(profileForm.firstName) }}
+                    {{ form_row(profileForm.lastName) }}
+                </div>
+                {{ form_row(profileForm.phone) }}
+                {{ form_row(profileForm.marketingEmailOptIn) }}
+                <button class="button button-primary" type="submit">Save changes</button>
+            {{ form_end(profileForm) }}
+        </div>
+    </section>
+{% endblock %}

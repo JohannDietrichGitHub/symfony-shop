@@ -2,6 +2,7 @@
 
 namespace App\Service;
 use App\Entity\User;
+use App\Entity\UserProfile;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -19,6 +20,7 @@ Final class UserRegistrationService
         );
 
         $user->setRoles(['ROLE_USER']);
+        $user->setProfile(new UserProfile());
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();

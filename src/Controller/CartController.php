@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Entity\CartItem;
 use App\Entity\User;
 use App\Service\CartItemManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -38,5 +39,47 @@ final class CartController extends AbstractController
         $cartItemManager->addProduct($user, $product);
 
         return $this->redirectToRoute('app_cart_show');
+    }
+
+    #[Route('/cart/items/{id}/increase', name: 'app_cart_item_increase', methods: ['POST'])]
+    public function increaseQuantity(
+        CartItem $cartItem,
+        #[CurrentUser] User $user,
+        Request $request,
+        CartItemManager $cartItemManager,
+    ): Response {
+        $this->assertCartItemBelongsToUser($cartItem, $user);
+        $this->assertValidCsrfToken($request, 'update_cart');
+        $cartItemManager->changeQuantity($cartItem, 1);
+
+        return $this->redirectToRoute('app_cart_show');
+    }
+
+    #[Route('/cart/items/{id}/decrease', name: 'app_cart_item_decrease', methods: ['POST'])]
+    public function decreaseQuantity(
+        CartItem $cartItem,
+        #[CurrentUser] User $user,
+        Request $request,
+        CartItemManager $cartItemManager,
+    ): Response {
+        $this->assertCartItemBelongsToUser($cartItem, $user);
+        $this->assertValidCsrfToken($request, 'update_cart');
+        $cartItemManager->changeQuantity($cartItem, -1);
+
+        return $this->redirectToRoute('app_cart_show');
+    }
+
+    private function assertCartItemBelongsToUser(CartItem $cartItem, User $user): void
+    {
+        if ($cartItem->getCart()?->getCustomer() !== $user) {
+            throw $this->createAccessDeniedException();
+        }
+    }
+
+    private function assertValidCsrfToken(Request $request, string $tokenId): void
+    {
+        if (!$this->isCsrfTokenValid($tokenId, $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException('Invalid CSRF token.');
+        }
     }
 }

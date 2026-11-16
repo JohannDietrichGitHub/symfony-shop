@@ -43,4 +43,25 @@ final class CartItemManager
         $this->entityManager->persist($cartItem);
         $this->entityManager->flush();
     }
+
+    public function changeQuantity(CartItem $cartItem, int $amount): void
+    {
+        $cart = $cartItem->getCart();
+        $quantity = ($cartItem->getQuantity() ?? 0) + $amount;
+
+        if (null === $cart) {
+            return;
+        }
+
+        if ($quantity <= 0) {
+            $cart->removeCartItem($cartItem);
+            $this->entityManager->remove($cartItem);
+        } else {
+            $cartItem->setQuantity($quantity);
+            $cartItem->setUpdatedAt(new \DateTimeImmutable());
+        }
+
+        $cart->setUpdatedAt(new \DateTimeImmutable());
+        $this->entityManager->flush();
+    }
 }
