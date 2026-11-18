@@ -65,7 +65,7 @@ final class OrderCreatorTest extends TestCase
 
     private function entityManager(): EntityManagerInterface
     {
-        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $entityManager = $this->createStub(EntityManagerInterface::class);
         $entityManager
             ->method('wrapInTransaction')
             ->willReturnCallback(static function (callable $callback): mixed {
@@ -77,7 +77,7 @@ final class OrderCreatorTest extends TestCase
 
     private function orderRepository(): OrderRepository
     {
-        $repository = $this->createMock(OrderRepository::class);
+        $repository = $this->createStub(OrderRepository::class);
         $repository->method('findLatestPendingForUser')->willReturn(null);
 
         return $repository;

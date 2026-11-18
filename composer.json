@@ -53,7 +53,8 @@
         "symfony/debug-bundle": "8.1.*",
         "symfony/maker-bundle": "^1.0",
         "symfony/stopwatch": "8.1.*",
-        "symfony/web-profiler-bundle": "8.1.*"
+        "symfony/web-profiler-bundle": "8.1.*",
+        "zenstruck/foundry": "^2.16"
     },
     "config": {
         "allow-plugins": {
@@ -87,6 +88,9 @@
         "symfony/polyfill-php84": "*"
     },
     "scripts": {
+        "test": "php bin/phpunit",
+        "test:all": "php bin/phpunit",
+        "test:coverage": "php bin/phpunit --coverage-text",
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd",
