@@ -3,15 +3,18 @@
 namespace App\Service;
 
 use App\Entity\Order;
+use App\Message\OrderPaidEmail;
 use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Stripe\Checkout\Session;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 final class OrderPaymentProcessor
 {
     public function __construct(
         private OrderRepository $orderRepository,
         private EntityManagerInterface $entityManager,
+        private MessageBusInterface $messageBus,
     ) {
     }
 
@@ -30,6 +33,7 @@ final class OrderPaymentProcessor
 
         $this->removePurchasedQuantitiesFromCart($order);
         $this->entityManager->flush();
+        $this->messageBus->dispatch(new OrderPaidEmail($order->getId()));
     }
 
     public function markCheckoutAsFailed(Session $session): void

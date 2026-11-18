@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Order #{{ order.id }} confirmed</title>
+</head>
+<body>
+    <h1>Thank you for your order</h1>
+    <p>Your payment for order <strong>#{{ order.id }}</strong> has been confirmed.</p>
+
+    <ul>
+        {% for item in order.orderItems %}
+            <li>
+                {{ item.productName }} × {{ item.quantity }}
+                — {{ ((item.unitPrice * item.quantity) / 100)|number_format(2, '.', ',') }} €
+            </li>
+        {% endfor %}
+    </ul>
+
+    <p><strong>Total: {{ (order.total / 100)|number_format(2, '.', ',') }} €</strong></p>
+    <p>We will let you know when your order is being prepared.</p>
+</body>
+</html>
