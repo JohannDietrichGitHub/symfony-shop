@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserProfileType;
+use App\Repository\OrderRepository;
 use App\Service\UserProfileService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,7 +16,11 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class ProfileController extends AbstractController
 {
     #[Route('/profile', name: 'app_profile', methods: ['GET', 'POST'])]
-    public function edit(Request $request, UserProfileService $profileService): Response
+    public function edit(
+        Request $request,
+        UserProfileService $profileService,
+        OrderRepository $orderRepository,
+    ): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -34,6 +39,7 @@ final class ProfileController extends AbstractController
         return $this->render('profile/edit.html.twig', [
             'profileForm' => $form,
             'user' => $user,
+            'orders' => $orderRepository->findForUser($user),
         ]);
     }
 }

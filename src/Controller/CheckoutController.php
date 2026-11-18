@@ -31,6 +31,15 @@ final class CheckoutController extends AbstractController
             throw $this->createAccessDeniedException('Invalid CSRF token.');
         }
 
+        if (!$stripeCheckout->isConfigured()) {
+            $this->addFlash(
+                'error',
+                'Stripe checkout is not configured. Set STRIPE_SECRET_KEY in .env.local, then restart the application.',
+            );
+
+            return $this->redirectToRoute('app_cart_show');
+        }
+
         try {
             $order = $orderCreator->createFromCart($user);
             $checkoutUrl = $stripeCheckout->createSession(

@@ -5,12 +5,14 @@ namespace App\Service;
 use App\Entity\Order;
 use App\Entity\OrderItem;
 use App\Entity\User;
+use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class OrderCreator
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
+        private OrderRepository $orderRepository,
     ) {
     }
 
@@ -20,6 +22,12 @@ final class OrderCreator
 
         if (null === $cart || $cart->getCartItems()->isEmpty()) {
             throw new \DomainException('Cannot create an order from an empty cart.');
+        }
+
+        $existingOrder = $this->orderRepository->findLatestPendingForUser($user);
+
+        if (null !== $existingOrder && $this->matchesCart($existingOrder, $cart->getCartItems()->toArray())) {
+            return $existingOrder;
         }
 
         $order = new Order();
@@ -70,5 +78,30 @@ final class OrderCreator
         });
 
         return $order;
+    }
+
+    /** @param list<\App\Entity\CartItem> $cartItems */
+    private function matchesCart(Order $order, array $cartItems): bool
+    {
+        if ($order->getOrderItems()->count() !== count($cartItems)) {
+            return false;
+        }
+
+        foreach ($cartItems as $cartItem) {
+            $product = $cartItem->getProduct();
+            $matchingItem = $order->getOrderItems()->findFirst(
+                static fn (int $index, OrderItem $orderItem): bool => $orderItem->getProduct() === $product,
+            );
+
+            if (
+                null === $matchingItem
+                || $matchingItem->getQuantity() !== $cartItem->getQuantity()
+                || $matchingItem->getUnitPrice() !== $product?->getPrice()
+            ) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

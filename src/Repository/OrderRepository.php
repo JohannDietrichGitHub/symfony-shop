@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Order;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,6 +15,34 @@ class OrderRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Order::class);
+    }
+
+    /** @return list<Order> */
+    public function findForUser(User $user): array
+    {
+        return $this->createQueryBuilder('o')
+            ->leftJoin('o.orderItems', 'oi')
+            ->addSelect('oi')
+            ->andWhere('o.user = :user')
+            ->setParameter('user', $user)
+            ->orderBy('o.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findLatestPendingForUser(User $user): ?Order
+    {
+        return $this->createQueryBuilder('o')
+            ->leftJoin('o.orderItems', 'oi')
+            ->addSelect('oi')
+            ->andWhere('o.user = :user')
+            ->andWhere('o.status = :status')
+            ->setParameter('user', $user)
+            ->setParameter('status', 'pending')
+            ->orderBy('o.createdAt', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
 //    /**

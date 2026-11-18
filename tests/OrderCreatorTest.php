@@ -6,6 +6,7 @@ use App\Entity\Cart;
 use App\Entity\CartItem;
 use App\Entity\Product;
 use App\Entity\User;
+use App\Repository\OrderRepository;
 use App\Service\OrderCreator;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
@@ -21,7 +22,7 @@ final class OrderCreatorTest extends TestCase
             ->setStock(5);
         $cart = $this->cartWithProduct($product, 2);
         $entityManager = $this->entityManager();
-        $order = (new OrderCreator($entityManager))->createFromCart($cart->getCustomer());
+        $order = (new OrderCreator($entityManager, $this->orderRepository()))->createFromCart($cart->getCustomer());
 
         self::assertSame(17998, $order->getTotal());
         self::assertSame('eur', $order->getCurrency());
@@ -40,7 +41,7 @@ final class OrderCreatorTest extends TestCase
         $cart = $this->cartWithProduct($product, 1);
 
         $this->expectException(\DomainException::class);
-        (new OrderCreator($this->entityManager()))->createFromCart($cart->getCustomer());
+        (new OrderCreator($this->entityManager(), $this->orderRepository()))->createFromCart($cart->getCustomer());
     }
 
     private function cartWithProduct(Product $product, int $quantity): Cart
@@ -72,5 +73,13 @@ final class OrderCreatorTest extends TestCase
             });
 
         return $entityManager;
+    }
+
+    private function orderRepository(): OrderRepository
+    {
+        $repository = $this->createMock(OrderRepository::class);
+        $repository->method('findLatestPendingForUser')->willReturn(null);
+
+        return $repository;
     }
 }

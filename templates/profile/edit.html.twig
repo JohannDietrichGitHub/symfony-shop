@@ -43,5 +43,42 @@
             </div>
             <a class="button button-primary" href="{{ path('app_address_index') }}">Manage addresses</a>
         </div>
+
+        <div class="profile-orders">
+            <div class="page-heading">
+                <div>
+                    <p class="eyebrow">Purchase history</p>
+                    <h2>Your orders</h2>
+                </div>
+            </div>
+
+            {% if orders is empty %}
+                <p class="muted">Your orders will appear here after checkout.</p>
+            {% else %}
+                {% for order in orders %}
+                    <article class="profile-card order-card">
+                        <div class="order-card-heading">
+                            <div>
+                                <p class="eyebrow">Order #{{ order.id }}</p>
+                                <p class="muted">{{ order.createdAt|date('F j, Y') }}</p>
+                            </div>
+                            <span class="order-status order-status-{{ order.status }}">{{ order.status|replace({'_': ' '})|title }}</span>
+                        </div>
+                        <ul class="order-items">
+                            {% for item in order.orderItems %}
+                                <li>
+                                    <span>{{ item.productName }} × {{ item.quantity }}</span>
+                                    <strong>{{ ((item.unitPrice * item.quantity) / 100)|number_format(2, '.', ',') }} €</strong>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        <div class="order-total">
+                            <span>Total</span>
+                            <strong>{{ (order.total / 100)|number_format(2, '.', ',') }} €</strong>
+                        </div>
+                    </article>
+                {% endfor %}
+            {% endif %}
+        </div>
     </section>
 {% endblock %}

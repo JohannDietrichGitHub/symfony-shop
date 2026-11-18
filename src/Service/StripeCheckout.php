@@ -14,9 +14,14 @@ final class StripeCheckout
     ) {
     }
 
+    public function isConfigured(): bool
+    {
+        return '' !== $this->secretKey;
+    }
+
     public function createSession(Order $order, string $successUrl, string $cancelUrl): string
     {
-        if ('' === $this->secretKey) {
+        if (!$this->isConfigured()) {
             throw new \RuntimeException('STRIPE_SECRET_KEY is not configured.');
         }
 
